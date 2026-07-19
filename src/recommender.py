@@ -1,73 +1,38 @@
-from typing import List, Dict, Tuple, Optional
-from dataclasses import dataclass
+def score_song(user_prefs, song):
+    """
+    Calculate a weighted relevance score for a single song.
+    Returns a tuple: (final_score, reasons_list)
+    """
 
-@dataclass
-class Song:
-    """
-    Represents a song and its attributes.
-    Required by tests/test_recommender.py
-    """
-    id: int
-    title: str
-    artist: str
-    genre: str
-    mood: str
-    energy: float
-    tempo_bpm: float
-    valence: float
-    danceability: float
-    acousticness: float
+    reasons = []
+    score = 0.0
 
-@dataclass
-class UserProfile:
-    """
-    Represents a user's taste preferences.
-    Required by tests/test_recommender.py
-    """
-    favorite_genre: str
-    favorite_mood: str
-    target_energy: float
-    likes_acoustic: bool
+    # --- Genre Match (High Weight) ---
+    if song["genre"].lower() == user_prefs["favorite_genre"].lower():
+        score += 3.0
+        reasons.append("Genre match (+3)")
+    else:
+        reasons.append("Genre mismatch (+0)")
 
-class Recommender:
-    """
-    OOP implementation of the recommendation logic.
-    Required by tests/test_recommender.py
-    """
-    def __init__(self, songs: List[Song]):
-        self.songs = songs
+    # --- Mood Match (Medium Weight) ---
+    if song["mood"].lower() == user_prefs["favorite_mood"].lower():
+        score += 2.0
+        reasons.append("Mood match (+2)")
+    else:
+        reasons.append("Mood mismatch (+0)")
 
-    def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+    # --- Energy Score (Continuous Feature) ---
+    # Closer energy → higher score
+    energy_gap = abs(song["energy"] - user_prefs["target_energy"])
+    energy_score = 1 - energy_gap  # range: 0 to 1
+    score += energy_score
+    reasons.append(f"Energy closeness (+{energy_score:.2f})")
 
-    def explain_recommendation(self, user: UserProfile, song: Song) -> str:
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+    # --- Tempo Score (Continuous Feature) ---
+    # Normalize tempo difference by dividing by 200 BPM
+    tempo_gap = abs(song["tempo_bpm"] - user_prefs["target_tempo"]) / 200
+    tempo_score = max(0, 1 - tempo_gap)  # avoid negative scores
+    score += tempo_score
+    reasons.append(f"Tempo closeness (+{tempo_score:.2f})")
 
-def load_songs(csv_path: str) -> List[Dict]:
-    """
-    Loads songs from a CSV file.
-    Required by src/main.py
-    """
-    # TODO: Implement CSV loading logic
-    print(f"Loading songs from {csv_path}...")
-    return []
-
-def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
-    """
-    Scores a single song against user preferences.
-    Required by recommend_songs() and src/main.py
-    """
-    # TODO: Implement scoring logic using your Algorithm Recipe from Phase 2.
-    # Expected return format: (score, reasons)
-    return []
-
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
-    """
-    Functional implementation of the recommendation logic.
-    Required by src/main.py
-    """
-    # TODO: Implement scoring and ranking logic
-    # Expected return format: (song_dict, score, explanation)
-    return []
+    return score, reasons
