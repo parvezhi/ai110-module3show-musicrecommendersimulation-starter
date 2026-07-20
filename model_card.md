@@ -1,111 +1,31 @@
-# 🎧 Model Card: Music Recommender Simulation
+# Model Card — VibeFinder 1.0
 
-## 1. Model Name  
+## Goal / Task
+VibeFinder 1.0 predicts which songs a user will enjoy based on genre, mood, energy, and tempo. It ranks songs using a weighted scoring system.
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+## Data Used
+The dataset contains 15–20 songs with attributes: title, artist, genre, mood, energy (0–1), and tempo_bpm. The dataset is small and not representative of real music diversity.
 
----
+## Algorithm Summary
+The system gives points for matching genre and mood, then adds continuous scores based on how close a song’s energy and tempo are to the user’s preferences. Songs are sorted from highest to lowest score.
 
-## 2. Intended Use  
+## Observed Behavior / Biases
+The system strongly favors the user’s favorite genre, which can create a “filter bubble.” Songs with slightly different moods or genres may be ignored even if they match the vibe. The dataset itself is imbalanced, so pop songs appear more often.
 
-Describe what your recommender is designed to do and who it is for. 
+## Evaluation Process
+I tested multiple profiles (pop/happy, rock/intense, lofi/chill). Each profile shifted the ranking in predictable ways: high‑energy profiles preferred fast songs, while chill profiles preferred low‑energy acoustic tracks.
 
-Prompts:  
+## Intended Use
+This system is meant for educational simulation and demonstrating basic content‑based recommendation logic.
 
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+## Non‑Intended Use
+Not suitable for real music recommendations, personalization, or commercial deployment.
 
----
+## Ideas for Improvement
+- Add more features like danceability or acousticness.
+- Add diversity penalties to avoid repeating artists.
+- Add multiple scoring modes (genre‑first, mood‑first).
+- Expand dataset to reduce bias.
 
-## 3. How the Model Works  
-
-Explain your scoring approach in simple language.  
-
-Prompts:  
-
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
-
----
-
-## 4. Data  
-
-Describe the dataset the model uses.  
-
-Prompts:  
-
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
-
----
-
-## 5. Strengths  
-
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
-
----
-
-## 6. Limitations and Bias 
-
-Where the system struggles or behaves unfairly. 
-
-Prompts:  
-
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
-
----
-
-## 7. Evaluation  
-
-How you checked whether the recommender behaved as expected. 
-
-Prompts:  
-
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
-
----
-
-## 8. Future Work  
-
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
-
----
-
-## 9. Personal Reflection  
-
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+## Personal Reflection
+I learned how simple scoring rules can create surprisingly realistic recommendations. Using AI tools helped speed up brainstorming, but I still needed to verify logic manually. The biggest surprise was how much genre weighting shaped the results. If I continued this project, I’d experiment with hybrid recommenders.
